@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <title>Registrazione Utente</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: #1e1e2f;
+            padding: 30px 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        h2 {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 30px;
+            letter-spacing: 1.5px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+        input, select {
+            padding: 12px 14px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 15px;
+            outline: none;
+            transition: box-shadow 0.3s ease;
+        }
+        input:focus, select:focus {
+            box-shadow: 0 0 6px 2px #8a8cff;
+            background-color: #2a2a44;
+            color: white;
+        }
+        button {
+            background-color: #ff6b6b;
+            color: white;
+            font-weight: 600;
+            padding: 14px;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #ff4b4b;
+        }
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+            color: #d4edda;
+            background-color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Registrazione Utente</h2>
+
+        <div th:if="${param.success != null}" class="success-message" role="alert" th:text="'Registrazione avvenuta con successo!'"></div>
+
+        <form th:action="@{/register}" th:object="${user}" method="post" aria-label="Modulo di registrazione utente">
+            <label for="username">Username</label>
+            <input type="text" id="username" th:field="*{username}" required aria-required="true" />
+
+            <label for="email">Email</label>
+            <input type="email" id="email" th:field="*{email}" required aria-required="true" />
+
+            <label for="password">Password</label>
+            <input type="password" id="password" th:field="*{password}" required aria-required="true" />
+
+            <label for="role">Ruolo</label>
+            <select id="role" th:field="*{role}" required aria-required="true">
+                <option value="">-- Seleziona un ruolo --</option>
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
+            </select>
+
+            <button type="submit">Registrati</button>
+        </form>
+    </div>
+</body>
+</html>

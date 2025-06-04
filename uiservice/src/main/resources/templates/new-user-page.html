@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Cerca Prodotti</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a82fb, #fc5c7d);
+            padding: 50px;
+            color: white;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: none;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        .product {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Cerca un prodotto</h1>
+
+    <form th:action="@{/products/search}" method="get">
+        <input type="text" name="name" placeholder="Scrivi il nome del prodotto..." required />
+        <button type="submit" style="padding: 10px 20px; border: none; background-color: #fff; color: #333; border-radius: 5px; cursor: pointer; font-weight: bold;">Cerca</button>
+    </form>
+
+    <div th:if="${articles != null}">
+        <div th:each="p : ${articles}" class="product">
+            <strong th:text="${p.name}">Nome</strong><br/>
+            <small th:text="${p.category}">Categoria</small><br/>
+            <small th:text="'Prezzo: €' + ${p.price}">Prezzo</small>
+            <small th:text="${p.distance}">Distanza</small><br/>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

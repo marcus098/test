@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pannello di Controllo</title>
+</head>
+<body>
+<h1 th:text="'Benvenuto nel pannello di controllo, ' + ${user.username}"></h1>
+
+<h2>Gestione Articoli</h2>
+
+<!-- Form per creare un nuovo articolo -->
+<form th:action="@{/dashboard/articles}" method="post">
+    <label>Nome: <input type="text" name="name" required /></label><br>
+    <label>Descrizione: <input type="text" name="description" required /></label><br>
+    <label>Prezzo: <input type="number" step="0.01" name="price" required /></label><br>
+    <button type="submit">Aggiungi Articolo</button>
+</form>
+
+<h3>I tuoi articoli</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Nome</th>
+        <th>Descrizione</th>
+        <th>Prezzo</th>
+        <th>Azioni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="article : ${articles}">
+        <td th:text="${article.name}"></td>
+        <td th:text="${article.description}"></td>
+        <td th:text="${article.price}"></td>
+        <td>
+            <form th:action="@{/dashboard/articles/delete/{id}(id=${article.id})}" method="post" style="display:inline;">
+                <button type="submit">Elimina</button>
+            </form>
+            <a th:href="@{/dashboard/articles/edit/{id}(id=${article.id})}">Modifica</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
