@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher; // Importa questa classe
+import org.springframework.http.HttpMethod; // Importa HttpMethod se vuoi specificare i metodi HTTP
 
 @Configuration
 public class SecurityConfig {
@@ -18,15 +20,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // Disabilita CSRF per API REST stateless
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/products/myshop/").hasRole("ADMIN")
-                        .requestMatchers("/products/shop").hasRole("ADMIN")
-                        .requestMatchers("/products/search").hasRole("USER")
-                        .requestMatchers("/products/shop/").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        // Utilizzo di AntPathRequestMatcher per definire i pattern URL
+                        // Ho unificato le due regole per /products/shop con un pattern più generico
+                        .requestMatchers(new AntPathRequestMatcher("/products/myshop")).hasRole("ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/products/shop")).hasRole("ADMIN") // Per il POST
+                        .requestMatchers(new AntPathRequestMatcher("/products/shop/**", HttpMethod.DELETE.name())).hasRole("ADMIN") // Per il DELETE con ID o altri sub-path
+                        .requestMatchers(new AntPathRequestMatcher("/products/search")).hasRole("USER")
+                        .anyRequest().authenticated() // Tutte le altre richieste devono essere autenticate
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Aggiunge il filtro JWT personalizzato
 
         return http.build();
     }
